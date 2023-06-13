@@ -982,14 +982,6 @@ impl MiniscriptKey for DescriptorPublicKey {
             _ => false,
         }
     }
-
-    fn num_der_paths(&self) -> usize {
-        match self {
-            DescriptorPublicKey::Single(_) => 0,
-            DescriptorPublicKey::XPub(_) => 1,
-            DescriptorPublicKey::MultiXPub(xpub) => xpub.derivation_paths.paths().len(),
-        }
-    }
 }
 
 impl DefiniteDescriptorKey {
@@ -1091,10 +1083,6 @@ impl MiniscriptKey for DefiniteDescriptorKey {
     fn is_x_only_key(&self) -> bool {
         self.0.is_x_only_key()
     }
-
-    fn num_der_paths(&self) -> usize {
-        self.0.num_der_paths()
-    }
 }
 
 impl ToPublicKey for DefiniteDescriptorKey {
@@ -1165,7 +1153,7 @@ mod test {
 
     use super::{
         DescriptorKeyParseError, DescriptorMultiXKey, DescriptorPublicKey, DescriptorSecretKey,
-        MiniscriptKey, Wildcard,
+        Wildcard,
     };
 
     #[test]
@@ -1356,7 +1344,6 @@ mod test {
         num_paths: usize,
     ) -> DescriptorMultiXKey<bip32::ExtendedPubKey> {
         let desc_key = DescriptorPublicKey::from_str(key_str).unwrap();
-        assert_eq!(desc_key.num_der_paths(), num_paths);
         match desc_key {
             DescriptorPublicKey::MultiXPub(xpub) => xpub,
             _ => unreachable!(),

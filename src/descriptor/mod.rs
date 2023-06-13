@@ -1111,28 +1111,28 @@ impl<Pk: MiniscriptKey, Ext: Extension> Descriptor<Pk, Ext> {
         #[derive(PartialEq)]
         enum MultipathLenChecker {
             SinglePath,
-            MultipathLen(usize),
+            // MultipathLen(usize),
             LenMismatch,
         }
 
-        let mut checker = MultipathLenChecker::SinglePath;
-        self.for_each_key(|key| {
-            match key.num_der_paths() {
-                0 | 1 => {}
-                n => match checker {
-                    MultipathLenChecker::SinglePath => {
-                        checker = MultipathLenChecker::MultipathLen(n);
-                    }
-                    MultipathLenChecker::MultipathLen(len) => {
-                        if len != n {
-                            checker = MultipathLenChecker::LenMismatch;
-                        }
-                    }
-                    MultipathLenChecker::LenMismatch => {}
-                },
-            }
-            true
-        });
+        let checker = MultipathLenChecker::SinglePath;
+        // self.for_each_key(|key| {
+        //     match key.num_der_paths() {
+        //         0 | 1 => {}
+        //         n => match checker {
+        //             MultipathLenChecker::SinglePath => {
+        //                 checker = MultipathLenChecker::MultipathLen(n);
+        //             }
+        //             MultipathLenChecker::MultipathLen(len) => {
+        //                 if len != n {
+        //                     checker = MultipathLenChecker::LenMismatch;
+        //                 }
+        //             }
+        //             MultipathLenChecker::LenMismatch => {}
+        //         },
+        //     }
+        //     true
+        // });
 
         checker == MultipathLenChecker::LenMismatch
     }
